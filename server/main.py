@@ -106,30 +106,30 @@ def calculate_frequency(documentList):
         #        print(frequences[f] , " ", f )
         wordFrequenctList[document[0]] =  frequences    
 
-    friq = wordFrequenctList.keys()
-    for documentNumber in friq:
-        for word in wordFrequenctList[documentNumber]:
-            print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
+    # friq = wordFrequenctList.keys()
+    # for documentNumber in friq:
+    #     for word in wordFrequenctList[documentNumber]:
+    #         print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
 
     return wordFrequenctList  
 
 #calculate the requency of the words 
-def create_invertedlist(wordFrequenctList):
+def create_invertedFile(wordFrequenctList):
     
     invertedFile = {}
     friq = wordFrequenctList.keys()
     for documentNumber in friq:
         for word in wordFrequenctList[documentNumber]:
-            invertedFile[(documentNumber,word)] = wordFrequenctList[documentNumber][word]
+            invertedFile[(int(documentNumber),word)] = wordFrequenctList[documentNumber][word]
             
     return invertedFile
     
-def saveInvertedList(outputFile,invertedFile) :
+def saveinvertedFile(outputFile,invertedFile) :
     output = open(outputFile, 'wb')
     dump(invertedFile, output, -1)
     output.close()
 
-def importInvertedList(inputfile) :
+def importinvertedFile(inputfile) :
     input = open(inputfile, 'rb')
     invertedFile = load(input)
     input.close()
@@ -151,29 +151,29 @@ def list_repetition(wordFrequenctList):
     return repetitionDict
 
 #calculate the weights of the words 
-def create_indexlist_Weights(wordFrequenctList):
+def create_invertedFile_Weights(wordFrequenctList):
     
-    listIndexWeights = {}
+    invertedFileWeights = {}
     friq = wordFrequenctList.keys()
     for documentNumber in friq:
         max_freq = list(wordFrequenctList[documentNumber].values())[0] 
         for word in wordFrequenctList[documentNumber]:
             freqd = wordFrequenctList[documentNumber][word]
-            listIndexWeights[(documentNumber,word)] = ((freqd)/max_freq) * math.log(10)
-            # print(listIndexWeights[(documentNumber,word)])
+            invertedFileWeights[(documentNumber,word)] = ((freqd)/max_freq) * math.log(10)
+            # print(invertedFileWeights[(documentNumber,word)])
 
-    return listIndexWeights
+    return invertedFileWeights
 
-def saveIndexListWeights(outputFile,listIndex) :
+def saveInvertedFileWeights(outputFile,invertedFileWeights) :
     output = open(outputFile, 'wb')
-    dump(listIndex, output, -1)
+    dump(invertedFileWeights, output, -1)
     output.close()
 
-def importIndexListWeights(inputfile) :
-    input = open(inputfile, 'rb')
-    listIndex = load(input)
+def importInvertedFileWeights(inputfileWeights) :
+    input = open(inputfileWeights, 'rb')
+    invertedFileWeights = load(input)
     input.close()
-    return listIndex
+    return invertedFileWeights
 
 ###################################
 ###################################
@@ -184,16 +184,11 @@ if __name__ == '__main__':
     documentList = extract_information()
     wordFrequenctList = calculate_frequency(documentList)
 
-    # invertedFile = create_indexlist(wordFrequenctList)
-    # saveIndexList("data/index.pkl",invertedFile)
+    # invertedFile = create_invertedFile(wordFrequenctList)
+    # saveInvertedFile("data/invertedFile.pkl",invertedFile)
 
-    # listIndex_weights =create_indexlist_Weights(wordFrequenctList)
-    # saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
+    # invertedFile_weights =create_invertedFile_Weights(wordFrequenctList)
+    # saveinvertedFileWeights("data/invertedFileWeights.pkl",invertedFileWeights)
 
-    # listIndex = create_indexlist(wordFrequenctList)
-    # saveIndexList("data/index.pkl",listIndex)
 
-    # listIndex_weights =create_indexlist_Weights(wordFrequenctList)
-    # saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
-
-    print(wordFrequenctList)
+    # print(wordFrequenctList)
