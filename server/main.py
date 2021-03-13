@@ -106,34 +106,34 @@ def calculate_frequency(documentList):
         #        print(frequences[f] , " ", f )
         wordFrequenctList[document[0]] =  frequences    
 
-    # friq = wordFrequenctList.keys()
-    # for documentNumber in friq:
-    #     for word in wordFrequenctList[documentNumber]:
-    #         print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
+    friq = wordFrequenctList.keys()
+    for documentNumber in friq:
+        for word in wordFrequenctList[documentNumber]:
+            print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
 
     return wordFrequenctList  
 
 #calculate the requency of the words 
-def create_indexlist(wordFrequenctList):
+def create_invertedlist(wordFrequenctList):
     
-    listIndex = {}
+    invertedFile = {}
     friq = wordFrequenctList.keys()
     for documentNumber in friq:
         for word in wordFrequenctList[documentNumber]:
-            listIndex[(documentNumber,word)] = wordFrequenctList[documentNumber][word]
+            invertedFile[(documentNumber,word)] = wordFrequenctList[documentNumber][word]
             
-    return listIndex
+    return invertedFile
     
-def saveIndexList(outputFile,listIndex) :
+def saveInvertedList(outputFile,invertedFile) :
     output = open(outputFile, 'wb')
-    dump(listIndex, output, -1)
+    dump(invertedFile, output, -1)
     output.close()
 
-def importIndexList(inputfile) :
+def importInvertedList(inputfile) :
     input = open(inputfile, 'rb')
-    listIndex = load(input)
+    invertedFile = load(input)
     input.close()
-    return listIndex
+    return invertedFile
 
 #calculate the number of repetition of the word in documents
 def list_repetition(wordFrequenctList):
@@ -184,11 +184,11 @@ if __name__ == '__main__':
     documentList = extract_information()
     wordFrequenctList = calculate_frequency(documentList)
 
-    listIndex = create_indexlist(wordFrequenctList)
-    saveIndexList("data/index.pkl",listIndex)
+    # invertedFile = create_indexlist(wordFrequenctList)
+    # saveIndexList("data/index.pkl",invertedFile)
 
-    listIndex_weights =create_indexlist_Weights(wordFrequenctList)
-    saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
+    # listIndex_weights =create_indexlist_Weights(wordFrequenctList)
+    # saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
 
     # listIndex = create_indexlist(wordFrequenctList)
     # saveIndexList("data/index.pkl",listIndex)
@@ -196,4 +196,4 @@ if __name__ == '__main__':
     # listIndex_weights =create_indexlist_Weights(wordFrequenctList)
     # saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
 
-    print(list_repetition(wordFrequenctList))
+    print(wordFrequenctList)
