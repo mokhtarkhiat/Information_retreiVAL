@@ -9,27 +9,23 @@ from nltk.probability import FreqDist
 
 #extract information from the file 
 def extract_information():
-
+    linesParcour = 0
+    documentNumber = 0
+    document = []
+    documentList = []
+    documentTitle = " "
+    text = " "
+    writers = " " 
     # read the file CACM 
 
     with open ("data/cacm.all") as cacm:
         listLines = cacm.readlines()
-        # print(listLines)
-        
-        linesParcour = 0
-        documentNumber = 0
-        
-        document = []
-        
-        documentList = []
-        documentTitle = " "
-        text = " "
-        writers = " "    
+        # print(listLines)   
         
     while(linesParcour != len(listLines)):
         line = listLines[linesParcour]
 
-    # extract the file number 
+        # extract the file number 
         if (line.startswith(".I")):
             documentNumber = line.split()[1]
             if document != []:
@@ -43,7 +39,7 @@ def extract_information():
             text = ""
             writers = ""
 
-    # extract the title 
+        # extract the title 
         if (line.startswith(".T")):
             linesParcour = linesParcour + 1
             while((nltk.re.findall('\.([TWBANX]\n|I d+\n)',listLines[linesParcour]) == []) and (linesParcour < len (listLines) )):
@@ -51,7 +47,7 @@ def extract_information():
                 linesParcour = linesParcour + 1
             linesParcour = linesParcour - 1     
             
-    # extract the text
+        # extract the text
         if (line.startswith(".W")):
             linesParcour = linesParcour + 1
             while((nltk.re.findall('\.([TWBANX]\n|I d+\n)',listLines[linesParcour]) == []) and (linesParcour < len (listLines) )):
@@ -59,7 +55,7 @@ def extract_information():
                 linesParcour = linesParcour + 1
             linesParcour = linesParcour - 1
             
-    # extract the writers
+        # extract the writers
         if (line.startswith(".A")):
             linesParcour = linesParcour + 1
             while((nltk.re.findall('\.([TWBANX]\n|I [0-9]+\n)',listLines[linesParcour]) == []) and (linesParcour < len (listLines) )):
