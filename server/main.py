@@ -134,9 +134,6 @@ def importIndexList(inputfile) :
     listIndex = load(input)
     input.close()
     return listIndex
-<<<<<<< HEAD
-
-
 
 #calculate the number of repetition of the word in documents
 def list_repetition(wordFrequenctList):
@@ -152,8 +149,6 @@ def list_repetition(wordFrequenctList):
 
 
     return repetitionDict
-=======
->>>>>>> 98f8edf41d0a9338a5e64f9ee481b260d702d388
 
 #calculate the weights of the words 
 def create_indexlist_Weights(wordFrequenctList):
@@ -185,18 +180,6 @@ def importIndexListWeights(inputfile) :
 #### applying the fonctions########
 ###################################
 ###################################
-
-
-<<<<<<< HEAD
-# listIndex = create_indexlist(wordFrequenctList)
-# saveIndexList("data/index.pkl",listIndex)
-
-# listIndex_weights =create_indexlist_Weights(wordFrequenctList)
-# saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
-
-print(list_repetition(wordFrequenctList))
- 
-=======
 if __name__ == '__main__':
     documentList = extract_information()
     wordFrequenctList = calculate_frequency(documentList)
@@ -206,4 +189,11 @@ if __name__ == '__main__':
 
     listIndex_weights =create_indexlist_Weights(wordFrequenctList)
     saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
->>>>>>> 98f8edf41d0a9338a5e64f9ee481b260d702d388
+
+    # listIndex = create_indexlist(wordFrequenctList)
+    # saveIndexList("data/index.pkl",listIndex)
+
+    # listIndex_weights =create_indexlist_Weights(wordFrequenctList)
+    # saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
+
+    print(list_repetition(wordFrequenctList))

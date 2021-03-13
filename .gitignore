@@ -1,3 +1,4 @@
 data/cacm.all
 data/common_words
 .vscode/settings.json
+server/__pycache__/
