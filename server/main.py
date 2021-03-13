@@ -109,9 +109,9 @@ def calculate_frequency(documentList):
         wordFrequenctList[document[0]] =  frequences    
 
     friq = wordFrequenctList.keys()
-    for key in friq:
-        for token in wordFrequenctList[key]:
-            print(key ,token , wordFrequenctList[key][token])
+    for documentNumber in friq:
+        for word in wordFrequenctList[documentNumber]:
+            print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
 
     return wordFrequenctList   
 
@@ -119,7 +119,7 @@ def calculate_frequency(documentList):
 
 ###################################
 ###################################
-#### aplying the fonctions#########
+#### applying the fonctions########
 ###################################
 ###################################
 
