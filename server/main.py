@@ -67,7 +67,7 @@ def extract_information():
     document.append(writers)
     documentList.append(document)
     
-    return documentList[:20]
+    return documentList
 
 
 #fonction calculate the frequency
