@@ -17,10 +17,8 @@ def extract_information():
     text = " "
     writers = " " 
     # read the file CACM 
-
     with open ("data/cacm.all") as cacm:
-        listLines = cacm.readlines()
-        # print(listLines)   
+        listLines = cacm.readlines() 
         
     while(linesParcour != len(listLines)):
         line = listLines[linesParcour]
@@ -68,9 +66,6 @@ def extract_information():
     document.append(text)
     document.append(writers)
     documentList.append(document)
-
-    # for d in documentList[19:20]:
-        # print(d)
     
     return documentList[:20]
 
@@ -85,32 +80,16 @@ def calculate_frequency(documentList):
     stopWordsList=[]
     for l in listLines:
         stopWordsList.append(l.split("\n")[0].lower())
-    
-    # for l in stopWordsList[:5]:
-    #     print(l)
-
     #tokenizing the texts and calculating the frequancy
     
     wordFrequenctList = {}
     for document in documentList:
         text = ''.join(document[1])
         text = text+"".join(document[2])
-        # print(document[2])
-        # print(text)
         tokenizer = nltk.RegexpTokenizer(r"\w+")
         tokenizedText = tokenizer.tokenize(text)
-        # print(tokenizedText)
         frequences = nltk.FreqDist(sorted(token for token in tokenizedText if token not in stopWordsList))
-
-        # for f in frequences:
-        #        print(frequences[f] , " ", f )
         wordFrequenctList[document[0]] =  frequences    
-
-    # friq = wordFrequenctList.keys()
-    # for documentNumber in friq:
-    #     for word in wordFrequenctList[documentNumber]:
-    #         print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
-
     return wordFrequenctList  
 
 #calculate the requency of the words 
@@ -124,12 +103,12 @@ def create_invertedFile(wordFrequenctList):
             
     return invertedFile
     
-def saveinvertedFile(outputFile,invertedFile) :
+def saveInvertedFile(outputFile,invertedFile) :
     output = open(outputFile, 'wb')
     dump(invertedFile, output, -1)
     output.close()
 
-def importinvertedFile(inputfile) :
+def importInvertedFile(inputfile) :
     input = open(inputfile, 'rb')
     invertedFile = load(input)
     input.close()
@@ -151,7 +130,7 @@ def list_repetition(wordFrequenctList):
     return repetitionDict
 
 #calculate the weights of the words 
-def create_invertedFile_Weights(wordFrequenctList):
+def createInvertedFileWeights(wordFrequenctList):
     
     invertedFileWeights = {}
     friq = wordFrequenctList.keys()
