@@ -67,7 +67,7 @@ def extract_information():
     document.append(writers)
     documentList.append(document)
     
-    return documentList
+    return documentList[:20]
 
 
 #fonction calculate the frequency
@@ -119,14 +119,16 @@ def list_repetition(wordFrequenctList):
     
     repetitionDict = {}
 
-    for document in wordFrequenctList:
-        for word in document.keys():
+    for key,value in wordFrequenctList.items():
+        for word in value:
             if word not in repetitionDict:
                 repetitionDict[word] = []
 
-            repetitionDict[word].append(document)    
-
-
+            repetitionDict[word].append(int(key))    
+       
+    for key,val in repetitionDict.items():
+        print(key , " ====>",val)
+    
     return repetitionDict
 
 #calculate the weights of the words 
@@ -169,5 +171,5 @@ if __name__ == '__main__':
     # invertedFile_weights =create_invertedFile_Weights(wordFrequenctList)
     # saveinvertedFileWeights("data/invertedFileWeights.pkl",invertedFileWeights)
 
-
+    list_repetition(wordFrequenctList)
     # print(wordFrequenctList)
