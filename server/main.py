@@ -3,7 +3,7 @@ import re
 import nltk
 import string
 import math
-
+from pickle import dump ,load
 from nltk.probability import FreqDist 
 
 
@@ -76,7 +76,7 @@ def extract_information():
     # for d in documentList[19:20]:
         # print(d)
     
-    return documentList[:2]
+    return documentList
 
 
 #fonction calculate the frequency
@@ -118,7 +118,7 @@ def calculate_frequency(documentList):
     return wordFrequenctList   
 
 #calculate the requency of the words 
-def create_index_file(wordFrequenctList):
+def create_indexlist(wordFrequenctList):
     
     listIndex = {}
     friq = wordFrequenctList.keys()
@@ -128,9 +128,19 @@ def create_index_file(wordFrequenctList):
             
     return listIndex
     
+def saveIndexList(outputFile,listIndex) :
+    output = open(outputFile, 'wb')
+    dump(listIndex, output, -1)
+    output.close()
+
+def importIndexList(inputfile) :
+    input = open(inputfile, 'rb')
+    listIndex = load(input)
+    input.close()
+    return 
 
 #calculate the weights of the words 
-def create_indexFile_Weights(wordFrequenctList):
+def create_indexlist_Weights(wordFrequenctList):
     
     listIndexWeights = {}
     friq = wordFrequenctList.keys()
@@ -139,9 +149,20 @@ def create_indexFile_Weights(wordFrequenctList):
         for word in wordFrequenctList[documentNumber]:
             freqd = wordFrequenctList[documentNumber][word]
             listIndexWeights[(documentNumber,word)] = ((freqd)/max_freq) * math.log(10)
-            print(listIndexWeights[(documentNumber,word)])
+            # print(listIndexWeights[(documentNumber,word)])
 
     return listIndexWeights
+
+def saveIndexListWeights(outputFile,listIndex) :
+    output = open(outputFile, 'wb')
+    dump(listIndex, output, -1)
+    output.close()
+
+def importIndexListWeights(inputfile) :
+    input = open(inputfile, 'rb')
+    listIndex = load(input)
+    input.close()
+    return listIndex
 
 ###################################
 ###################################
@@ -151,5 +172,9 @@ def create_indexFile_Weights(wordFrequenctList):
 
 documentList = extract_information()
 wordFrequenctList = calculate_frequency(documentList)
-create_index_file(wordFrequenctList)
-create_indexFile_Weights(wordFrequenctList)
+
+listIndex = create_indexlist(wordFrequenctList)
+saveIndexList("data/index.pkl",listIndex)
+
+listIndex_weights =create_indexlist_Weights(wordFrequenctList)
+saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
