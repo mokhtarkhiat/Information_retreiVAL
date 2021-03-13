@@ -9,27 +9,23 @@ from nltk.probability import FreqDist
 
 #extract information from the file 
 def extract_information():
-
+    linesParcour = 0
+    documentNumber = 0
+    document = []
+    documentList = []
+    documentTitle = " "
+    text = " "
+    writers = " " 
     # read the file CACM 
 
     with open ("data/cacm.all") as cacm:
         listLines = cacm.readlines()
-        # print(listLines)
-        
-        linesParcour = 0
-        documentNumber = 0
-        
-        document = []
-        
-        documentList = []
-        documentTitle = " "
-        text = " "
-        writers = " "    
+        # print(listLines)   
         
     while(linesParcour != len(listLines)):
         line = listLines[linesParcour]
 
-    # extract the file number 
+        # extract the file number 
         if (line.startswith(".I")):
             documentNumber = line.split()[1]
             if document != []:
@@ -43,7 +39,7 @@ def extract_information():
             text = ""
             writers = ""
 
-    # extract the title 
+        # extract the title 
         if (line.startswith(".T")):
             linesParcour = linesParcour + 1
             while((nltk.re.findall('\.([TWBANX]\n|I d+\n)',listLines[linesParcour]) == []) and (linesParcour < len (listLines) )):
@@ -51,7 +47,7 @@ def extract_information():
                 linesParcour = linesParcour + 1
             linesParcour = linesParcour - 1     
             
-    # extract the text
+        # extract the text
         if (line.startswith(".W")):
             linesParcour = linesParcour + 1
             while((nltk.re.findall('\.([TWBANX]\n|I d+\n)',listLines[linesParcour]) == []) and (linesParcour < len (listLines) )):
@@ -59,7 +55,7 @@ def extract_information():
                 linesParcour = linesParcour + 1
             linesParcour = linesParcour - 1
             
-    # extract the writers
+        # extract the writers
         if (line.startswith(".A")):
             linesParcour = linesParcour + 1
             while((nltk.re.findall('\.([TWBANX]\n|I [0-9]+\n)',listLines[linesParcour]) == []) and (linesParcour < len (listLines) )):
@@ -138,6 +134,7 @@ def importIndexList(inputfile) :
     listIndex = load(input)
     input.close()
     return listIndex
+<<<<<<< HEAD
 
 
 
@@ -155,6 +152,8 @@ def list_repetition(wordFrequenctList):
 
 
     return repetitionDict
+=======
+>>>>>>> 98f8edf41d0a9338a5e64f9ee481b260d702d388
 
 #calculate the weights of the words 
 def create_indexlist_Weights(wordFrequenctList):
@@ -187,9 +186,8 @@ def importIndexListWeights(inputfile) :
 ###################################
 ###################################
 
-documentList = extract_information()
-wordFrequenctList = calculate_frequency(documentList)
 
+<<<<<<< HEAD
 # listIndex = create_indexlist(wordFrequenctList)
 # saveIndexList("data/index.pkl",listIndex)
 
@@ -198,3 +196,14 @@ wordFrequenctList = calculate_frequency(documentList)
 
 print(list_repetition(wordFrequenctList))
  
+=======
+if __name__ == '__main__':
+    documentList = extract_information()
+    wordFrequenctList = calculate_frequency(documentList)
+
+    listIndex = create_indexlist(wordFrequenctList)
+    saveIndexList("data/index.pkl",listIndex)
+
+    listIndex_weights =create_indexlist_Weights(wordFrequenctList)
+    saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
+>>>>>>> 98f8edf41d0a9338a5e64f9ee481b260d702d388
