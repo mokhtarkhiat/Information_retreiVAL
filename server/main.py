@@ -2,7 +2,9 @@
 import re 
 import nltk
 import string
+import math
 
+from nltk.probability import FreqDist 
 
 
 #extract information from the file 
@@ -74,7 +76,7 @@ def extract_information():
     # for d in documentList[19:20]:
         # print(d)
     
-    return documentList
+    return documentList[:2]
 
 
 #fonction calculate the frequency
@@ -108,14 +110,38 @@ def calculate_frequency(documentList):
         #        print(frequences[f] , " ", f )
         wordFrequenctList[document[0]] =  frequences    
 
-    friq = wordFrequenctList.keys()
-    for documentNumber in friq:
-        for word in wordFrequenctList[documentNumber]:
-            print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
+    # friq = wordFrequenctList.keys()
+    # for documentNumber in friq:
+    #     for word in wordFrequenctList[documentNumber]:
+    #         print("{",documentNumber," , " ,word," } ===>" , wordFrequenctList[documentNumber][word])
 
     return wordFrequenctList   
 
+#calculate the requency of the words 
+def create_index_file(wordFrequenctList):
+    
+    listIndex = {}
+    friq = wordFrequenctList.keys()
+    for documentNumber in friq:
+        for word in wordFrequenctList[documentNumber]:
+            listIndex[(documentNumber,word)] = wordFrequenctList[documentNumber][word]
+            
+    return listIndex
+    
 
+#calculate the weights of the words 
+def create_indexFile_Weights(wordFrequenctList):
+    
+    listIndexWeights = {}
+    friq = wordFrequenctList.keys()
+    for documentNumber in friq:
+        max_freq = list(wordFrequenctList[documentNumber].values())[0] 
+        for word in wordFrequenctList[documentNumber]:
+            freqd = wordFrequenctList[documentNumber][word]
+            listIndexWeights[(documentNumber,word)] = ((freqd)/max_freq) * math.log(10)
+            print(listIndexWeights[(documentNumber,word)])
+
+    return listIndexWeights
 
 ###################################
 ###################################
@@ -124,4 +150,6 @@ def calculate_frequency(documentList):
 ###################################
 
 documentList = extract_information()
-list_fd = calculate_frequency(documentList)
+wordFrequenctList = calculate_frequency(documentList)
+create_index_file(wordFrequenctList)
+create_indexFile_Weights(wordFrequenctList)
