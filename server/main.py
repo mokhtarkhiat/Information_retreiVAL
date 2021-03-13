@@ -170,11 +170,13 @@ def importIndexListWeights(inputfile) :
 ###################################
 ###################################
 
-documentList = extract_information()
-wordFrequenctList = calculate_frequency(documentList)
 
-listIndex = create_indexlist(wordFrequenctList)
-saveIndexList("data/index.pkl",listIndex)
+if __name__ == '__main__':
+    documentList = extract_information()
+    wordFrequenctList = calculate_frequency(documentList)
 
-listIndex_weights =create_indexlist_Weights(wordFrequenctList)
-saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
+    listIndex = create_indexlist(wordFrequenctList)
+    saveIndexList("data/index.pkl",listIndex)
+
+    listIndex_weights =create_indexlist_Weights(wordFrequenctList)
+    saveIndexListWeights("data/indexWeights.pkl",listIndex_weights)
