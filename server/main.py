@@ -133,7 +133,7 @@ def importIndexList(inputfile) :
     input = open(inputfile, 'rb')
     listIndex = load(input)
     input.close()
-    return 
+    return listIndex
 
 #calculate the weights of the words 
 def create_indexlist_Weights(wordFrequenctList):
