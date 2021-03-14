@@ -68,7 +68,11 @@ def extract_information():
     document.append(writers)
     documentList.append(document)
     
+<<<<<<< HEAD
     return documentList[:100]
+=======
+    return documentList
+>>>>>>> d092cf963361269e99e4b1d5bdf960a3bccdd762
 
 
 #fonction calculate the frequency
@@ -104,12 +108,12 @@ def create_invertedFile(wordFrequenctList):
             
     return invertedFile
     
-def saveInvertedFile(outputFile,invertedFile) :
+def saveToFile(outputFile,obj) :
     output = open(outputFile, 'wb')
-    dump(invertedFile, output, -1)
+    dump(obj, output, -1)
     output.close()
 
-def importInvertedFile(inputfile) :
+def importFromFile(inputfile) :
     input = open(inputfile, 'rb')
     invertedFile = load(input)
     input.close()
@@ -127,7 +131,18 @@ def list_repetition(wordFrequenctList):
 
             repetitionDict[word].append(int(key))    
        
+<<<<<<< HEAD
+=======
+    # for key,val in repetitionDict.items():
+    #     print(key , " ====>",val)
+    
+>>>>>>> d092cf963361269e99e4b1d5bdf960a3bccdd762
     return repetitionDict
+
+# def satDocsForWord(wordFrequenctList , word):
+
+
+    
 
 #calculate the weights of the words 
 def createInvertedFileWeights(wordFrequenctList,repetitionDict):
@@ -146,16 +161,7 @@ def createInvertedFileWeights(wordFrequenctList,repetitionDict):
     print(invertedFileWeights)
     return invertedFileWeights
 
-def saveInvertedFileWeights(outputFile,invertedFileWeights) :
-    output = open(outputFile, 'wb')
-    dump(invertedFileWeights, output, -1)
-    output.close()
 
-def importInvertedFileWeights(inputfileWeights) :
-    input = open(inputfileWeights, 'rb')
-    invertedFileWeights = load(input)
-    input.close()
-    return invertedFileWeights
 
 ######## vectorial search 
 # preparation (creat the matrix)
@@ -283,6 +289,7 @@ def calculatePrecision():
 if __name__ == '__main__':
     documentList = extract_information()
     wordFrequenctList = calculate_frequency(documentList)
+<<<<<<< HEAD
     
     invertedFile = create_invertedFile(wordFrequenctList)
     # saveInvertedFile("data/invertedFile.pkl",invertedFile)
@@ -314,4 +321,15 @@ if __name__ == '__main__':
     
     
     
+=======
+
+    # invertedFile = create_invertedFile(wordFrequenctList)
+    # saveToFile("data/invertedFile.pkl",invertedFile)
+
+    # invertedFile_weights = createInvertedFileWeights(wordFrequenctList)
+    # saveToFile("data/invertedFileWeights.pkl",invertedFile_weights)
+
+    # list_repetition(wordFrequenctList)
+    saveToFile('data/repetitionList.pkl' , list_repetition(wordFrequenctList))
+>>>>>>> d092cf963361269e99e4b1d5bdf960a3bccdd762
     # print(wordFrequenctList)
