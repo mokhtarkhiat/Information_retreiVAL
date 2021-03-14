@@ -148,17 +148,17 @@ if __name__ == '__main__':
     listWords = list(repetitionDict.keys())
     
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
     
     
     similarityMeasure =  "Cosine similarity"#type de similariy 4
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
     
     similarityMeasure =  "Jaccard index"#type de similariy 4
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
 
     similarityMeasure =  "Inner product"#type de similariy 4
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
