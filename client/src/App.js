@@ -3,7 +3,7 @@ import tw, { styled } from "twin.macro";
 import TextareaAutosize from "react-autosize-textarea";
 import { motion, AnimateSharedLayout } from "framer-motion";
 
-import { AnalyzeResults } from "./Components/AnalyzeResults";
+import { SearchResults } from "./Components/SearchResults";
 
 import { ImSpinner9 } from "react-icons/im";
 import { IoBarcodeOutline, IoSearchSharp } from "react-icons/io5";
@@ -30,23 +30,40 @@ export const SelectableHalf = styled.div(({ selected, direction }) => [
 ]);
 
 function App() {
-  const [sent, setSent] = useState("");
+  const [sent, setSent] = useState("(preliminary or (report and time))");
   const [selectedModel, setSelectedModel] = useState(1);
+  const [selectedVectType, setSelectedVectType] = useState(0);
   const [result, setResult] = useState(undefined);
   const [loading, setLoading] = useState(false);
 
-  const handleAnalyzeText = () => {
+  const handleBooleanSearch = () => {
     setLoading(true);
     setResult(undefined);
 
-    fetch(`${API}/analyze?sent=${sent}`)
+    fetch(`${API}/booleansearch?sent=${sent}`)
       .then((response) => response.json())
       .then((data) => {
         setResult(data);
         setLoading(false);
       })
       .catch((e) => {
-        alert("Error");
+        alert("Error from server !");
+        setLoading(false);
+      });
+  };
+
+  const handleVectorialSearch = () => {
+    setLoading(true);
+    setResult(undefined);
+
+    fetch(`${API}/vectsearch?sent=${sent}&type=${selectedVectType}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setResult(data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        alert("Error from server !");
         setLoading(false);
       });
   };
@@ -67,7 +84,8 @@ function App() {
                   direction="left"
                   onClick={() =>
                     setSelectedModel(1) ||
-                    setSent("(preliminary or (report and time))")
+                    setSent("(preliminary or (report and time))") ||
+                    setResult(undefined)
                   }
                 >
                   <motion.div
@@ -85,7 +103,8 @@ function App() {
                     setSelectedModel(2) ||
                     setSent(
                       "Dictionary construction and accessing methods for fast retrieval of words or lexical items or morphologically related information. Hashing or indexing methods are usually applied to English spelling or natural language problems."
-                    )
+                    ) ||
+                    setResult(undefined)
                   }
                 >
                   <motion.div
@@ -103,12 +122,13 @@ function App() {
               <select
                 tw="w-full mb-4 mx-auto lg:w-1/4  text-lg font-bold uppercase text-pink-600 border-2 border-pink-600 rounded-3xl bg-gradient-to-br from-indigo-100 via-pink-200 to-yellow-100 outline-none p-1"
                 style={{ textAlignLast: "center" }}
-                value={1}
+                value={selectedVectType}
+                onChange={(e) => setSelectedVectType(e.target.value)}
               >
                 <option value={0}>Sørensen–Dice coefficient</option>
                 <option value={1}>Cosine similarity</option>
                 <option value={2}>Jaccard index</option>
-                <option value={4}>Inner product</option>
+                <option value={3}>Inner product</option>
               </select>
             )}
 
@@ -125,14 +145,18 @@ function App() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 style={{ outline: "none" }}
-                onClick={handleAnalyzeText}
+                onClick={
+                  selectedModel === 1
+                    ? handleBooleanSearch
+                    : handleVectorialSearch
+                }
               >
                 <IoSearchSharp tw="my-auto mr-2 text-lg " />
                 <span tw="my-auto">{result && "new"} Search</span>
               </Button>
             )}
           </motion.div>
-          {result && <AnalyzeResults result={result} />}
+          {result && <SearchResults result={result} model={selectedModel} />}
         </MainContent>
       </Container>
     </AnimateSharedLayout>
