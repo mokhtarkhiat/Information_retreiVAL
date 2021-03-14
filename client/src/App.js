@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import tw, { styled } from "twin.macro";
+import tw from "twin.macro";
 import TextareaAutosize from "react-autosize-textarea";
 import { motion, AnimateSharedLayout } from "framer-motion";
 
@@ -13,7 +13,7 @@ let API =
     ? process.env.REACT_APP_PROD_API
     : process.env.REACT_APP_DEV_API;
 
-const Container = tw.div`flex min-h-screen p-2 lg:p-4  bg-gradient-to-tr from-indigo-200 via-pink-100 to-yellow-50`;
+const Container = tw.div`flex min-h-screen p-2 lg:p-4 bg-blue-50 bg-opacity-30`;
 const MainContent = tw(motion.div)`w-full flex flex-col`;
 const TextInput = tw(TextareaAutosize)`border p-3 rounded-3xl border-gray-200
 ring-2 ring-pink-700 text-gray-500 resize-none text-center
@@ -22,16 +22,8 @@ const Button = tw(
   motion.div
 )`cursor-pointer flex align-middle rounded-3xl px-6 font-bold h-10 m-3 mx-auto bg-gradient-to-br from-indigo-600 via-pink-600 to-yellow-500 text-white shadow focus:ring-2 focus:ring-yellow-400`;
 
-export const SelectableHalf = styled.div(({ selected, direction }) => [
-  tw`w-1/2 h-full bg-gradient-to-br from-indigo-200 via-pink-200 to-yellow-100 hover:bg-gradient-to-tr hover:from-yellow-200 hover:via-pink-300 hover:to-indigo-300 flex text-pink-600 cursor-pointer`,
-  selected &&
-    tw`bg-gradient-to-br from-indigo-500 via-pink-500 to-yellow-400 hover:bg-gradient-to-tr hover:from-yellow-500 hover:via-pink-600 hover:to-indigo-600  text-yellow-50`,
-  direction === "right" ? tw`rounded-r-3xl` : tw`rounded-l-3xl`,
-]);
-
 function App() {
-  const [sent, setSent] = useState("");
-  const [selectedModel, setSelectedModel] = useState(1);
+  const [sent, setSent] = useState("(preliminary or (report and time))");
   const [result, setResult] = useState(undefined);
   const [loading, setLoading] = useState(false);
 
@@ -57,61 +49,9 @@ function App() {
         <MainContent>
           <motion.div layout tw="flex flex-col my-auto w-full">
             <IoBarcodeOutline tw="mx-auto text-7xl text-pink-600" />
-            <h1 tw="mx-auto text-4xl font-bold mb-2 text-center text-transparent  bg-clip-text bg-gradient-to-br from-yellow-300 via-pink-500 to-indigo-600 ">
+            <h1 tw="mx-auto text-4xl font-bold mb-4 text-center text-transparent  bg-clip-text bg-gradient-to-br from-yellow-300 via-pink-500 to-indigo-600 ">
               Information Retrival Project
             </h1>
-            <div tw="h-10 w-full lg:w-1/4 mx-auto my-4 font-bold text-center uppercase flex rounded-3xl border border-pink-300 shadow">
-              <div tw="flex w-full">
-                <SelectableHalf
-                  selected={selectedModel === 1}
-                  direction="left"
-                  onClick={() =>
-                    setSelectedModel(1) ||
-                    setSent("(preliminary or (report and time))")
-                  }
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    tw="m-auto"
-                  >
-                    Boolean Model
-                  </motion.div>
-                </SelectableHalf>
-                <SelectableHalf
-                  selected={selectedModel === 2}
-                  direction="right"
-                  onClick={() =>
-                    setSelectedModel(2) ||
-                    setSent(
-                      "Dictionary construction and accessing methods for fast retrieval of words or lexical items or morphologically related information. Hashing or indexing methods are usually applied to English spelling or natural language problems."
-                    )
-                  }
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    tw="m-auto"
-                  >
-                    Victorien Model{" "}
-                  </motion.div>
-                </SelectableHalf>
-              </div>
-            </div>
-
-            {selectedModel === 2 && (
-              <select
-                tw="w-full mb-4 mx-auto lg:w-1/4  text-lg font-bold uppercase text-pink-600 border-2 border-pink-600 rounded-3xl bg-gradient-to-br from-indigo-100 via-pink-200 to-yellow-100 outline-none p-1"
-                style={{ textAlignLast: "center" }}
-                value={1}
-              >
-                <option value={0}>Sørensen–Dice coefficient</option>
-                <option value={1}>Cosine similarity</option>
-                <option value={2}>Jaccard index</option>
-                <option value={4}>Inner product</option>
-              </select>
-            )}
-
             <TextInput
               placeholder="Enter a sentence to scan here"
               value={sent}

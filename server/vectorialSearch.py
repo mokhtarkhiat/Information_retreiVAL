@@ -40,12 +40,12 @@ def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,listWord
     queryWords = list(sorted(token.lower() for token in queryAllWords if token not in stopWordsList))
     
     ####### query victor
-    queryVictor = np.zeros(len(listWords))
+    queryVictor = {}
     for index in range(len(queryWords)):
         word = queryWords[index]
-        
         if word in listWords:
-            
+            if listWords.index(word) not in queryVictor.keys():
+                 queryVictor[listWords.index(word)] = 0 
             queryVictor[listWords.index(word)] = queryVictor[listWords.index(word)] + 1
   
     ####### calculate sem
@@ -56,24 +56,24 @@ def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,listWord
             sommey_y = 0
             sommex_x = 0
             somme    = 0
-           
-            for word in range (len(queryVictor)) :
-                sommex_y = sommex_y + queryVictor[word] * matrixDoxumentTerm[documentNumber][word]
-            
+ 
+            for key in queryVictor.keys() :
+                sommex_y = sommex_y + queryVictor[key] * matrixDoxumentTerm[documentNumber][key]
+                
             if sommex_y != 0 :
                 somme = sommex_y
-                documentList[documentNumber+1]= somme
+                documentList[documentNumber+1] = somme
             
     elif similarityMeasure == "Sørensen–Dice coefficient":
         for documentNumber in range (len(matrixDoxumentTerm)):
             sommex_y = 0
             sommey_y = 0
             sommex_x = 0
-            somme    = 0
-            for word in range (len(queryVictor)) :
-                sommex_x = sommex_x + queryVictor[word]*queryVictor[word]
-                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][word] * matrixDoxumentTerm[documentNumber][word]
-                sommex_y = sommex_y + queryVictor[word]*matrixDoxumentTerm[documentNumber][word]
+            
+            for key in queryVictor.keys():
+                sommex_x = sommex_x + queryVictor[key]*queryVictor[key]
+                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][key] * matrixDoxumentTerm[documentNumber][key]
+                sommex_y = sommex_y + queryVictor[key]*matrixDoxumentTerm[documentNumber][key]
             if sommex_x + sommey_y > 0 and sommex_y != 0 :
                 somme = 2 * sommex_y/(sommex_x + sommey_y)
                 documentList[documentNumber+1]= somme
@@ -83,10 +83,10 @@ def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,listWord
             sommey_y = 0
             sommex_x = 0
             somme    = 0
-            for word in range (len(queryVictor)):
-                sommex_x = sommex_x + queryVictor[word]*queryVictor[word]
-                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][word] * matrixDoxumentTerm[documentNumber][word]
-                sommex_y = sommex_y + queryVictor[word]*matrixDoxumentTerm[documentNumber][word]
+            for key in queryVictor.keys(): 
+                sommex_x = sommex_x + queryVictor[key]*queryVictor[key]
+                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][key] * matrixDoxumentTerm[documentNumber][key]
+                sommex_y = sommex_y + queryVictor[key]*matrixDoxumentTerm[documentNumber][key]
             if sommex_x * sommey_y > 0 and  sommex_y != 0 :
                 somme = sommex_y/math.sqrt(sommex_x * sommey_y)
                 documentList[documentNumber+1]= somme
@@ -97,16 +97,16 @@ def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,listWord
             sommey_y = 0
             sommex_x = 0
             somme    = 0
-            for word in range (len(queryVictor)) :
-                sommex_x = sommex_x + queryVictor[word]*queryVictor[word]
-                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][word] * matrixDoxumentTerm[documentNumber][word]
-                sommex_y = sommex_y + queryVictor[word]*matrixDoxumentTerm[documentNumber][word]
+            for key in queryVictor.keys():
+                sommex_x = sommex_x + queryVictor[key]*queryVictor[key]
+                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][key] * matrixDoxumentTerm[documentNumber][key]
+                sommex_y = sommex_y + queryVictor[key]*matrixDoxumentTerm[documentNumber][key]
             if sommex_x + sommey_y - sommex_y > 0 and sommex_y != 0 :
                 somme = sommex_y/(sommex_x + sommey_y - sommex_y)
                 documentList[documentNumber+1]= somme
     
     
-    documentListResult = list(documentList.keys())
+    documentListResult = list(documentList.items())
     documentListResult = sorted(documentListResult)
     return documentListResult
 
@@ -148,17 +148,17 @@ if __name__ == '__main__':
     listWords = list(repetitionDict.keys())
     
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
     
     
     similarityMeasure =  "Cosine similarity"#type de similariy 4
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
     
     similarityMeasure =  "Jaccard index"#type de similariy 4
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
 
     similarityMeasure =  "Inner product"#type de similariy 4
     documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
-    print(len(documentListResult))
+    print(documentListResult)
