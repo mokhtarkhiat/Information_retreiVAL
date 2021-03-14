@@ -1,4 +1,4 @@
-from main import importFromFile ,list_repetition
+from utils import importFromFile ,list_repetition
 
 operators = 'and or not ( )'.split()
 proiority = {
