@@ -68,11 +68,8 @@ def extract_information():
     document.append(writers)
     documentList.append(document)
     
-<<<<<<< HEAD
+
     return documentList[:100]
-=======
-    return documentList
->>>>>>> d092cf963361269e99e4b1d5bdf960a3bccdd762
 
 
 #fonction calculate the frequency
@@ -131,12 +128,7 @@ def list_repetition(wordFrequenctList):
 
             repetitionDict[word].append(int(key))    
        
-<<<<<<< HEAD
-=======
-    # for key,val in repetitionDict.items():
-    #     print(key , " ====>",val)
-    
->>>>>>> d092cf963361269e99e4b1d5bdf960a3bccdd762
+
     return repetitionDict
 
 # def satDocsForWord(wordFrequenctList , word):
@@ -289,7 +281,7 @@ def calculatePrecision():
 if __name__ == '__main__':
     documentList = extract_information()
     wordFrequenctList = calculate_frequency(documentList)
-<<<<<<< HEAD
+
     
     invertedFile = create_invertedFile(wordFrequenctList)
     # saveInvertedFile("data/invertedFile.pkl",invertedFile)
@@ -321,7 +313,7 @@ if __name__ == '__main__':
     
     
     
-=======
+
 
     # invertedFile = create_invertedFile(wordFrequenctList)
     # saveToFile("data/invertedFile.pkl",invertedFile)
@@ -331,5 +323,4 @@ if __name__ == '__main__':
 
     # list_repetition(wordFrequenctList)
     saveToFile('data/repetitionList.pkl' , list_repetition(wordFrequenctList))
->>>>>>> d092cf963361269e99e4b1d5bdf960a3bccdd762
     # print(wordFrequenctList)
