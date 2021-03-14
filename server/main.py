@@ -1,6 +1,7 @@
 # back end 
 import re 
 import nltk
+import numpy as np
 import string
 import math
 from pickle import dump ,load
@@ -67,7 +68,7 @@ def extract_information():
     document.append(writers)
     documentList.append(document)
     
-    return documentList[:20]
+    return documentList[:100]
 
 
 #fonction calculate the frequency
@@ -99,7 +100,7 @@ def create_invertedFile(wordFrequenctList):
     friq = wordFrequenctList.keys()
     for documentNumber in friq:
         for word in wordFrequenctList[documentNumber]:
-            invertedFile[(int(documentNumber),word)] = wordFrequenctList[documentNumber][word]
+            invertedFile[(word,int(documentNumber))] = wordFrequenctList[documentNumber][word]
             
     return invertedFile
     
@@ -126,23 +127,23 @@ def list_repetition(wordFrequenctList):
 
             repetitionDict[word].append(int(key))    
        
-    for key,val in repetitionDict.items():
-        print(key , " ====>",val)
-    
     return repetitionDict
 
 #calculate the weights of the words 
-def createInvertedFileWeights(wordFrequenctList):
-    
+def createInvertedFileWeights(wordFrequenctList,repetitionDict):
+    numberOfWords = len(repetitionDict.keys())
     invertedFileWeights = {}
     friq = wordFrequenctList.keys()
     for documentNumber in friq:
         max_freq = list(wordFrequenctList[documentNumber].values())[0] 
         for word in wordFrequenctList[documentNumber]:
             freqd = wordFrequenctList[documentNumber][word]
-            invertedFileWeights[(documentNumber,word)] = ((freqd)/max_freq) * math.log(10)
+            numberRepetitionWord = len(repetitionDict[word])
+            invertedFileWeights[(word,int(documentNumber))] = ((freqd)/max_freq) * math.log10((numberOfWords/numberRepetitionWord)+1)
             # print(invertedFileWeights[(documentNumber,word)])
-
+    
+    
+    print(invertedFileWeights)
     return invertedFileWeights
 
 def saveInvertedFileWeights(outputFile,invertedFileWeights) :
@@ -156,6 +157,124 @@ def importInvertedFileWeights(inputfileWeights) :
     input.close()
     return invertedFileWeights
 
+######## vectorial search 
+# preparation (creat the matrix)
+def preparationVectorialSearch(repetitionDict,invertedFile,numberDocuments):
+    
+    matrixDoxumentTerm = np.zeros( ( numberDocuments,len(repetitionDict.keys()) ) )
+    wordIndexInRepetition = 0
+    
+    for word,documentCollection in repetitionDict.items():
+        for documentNumber in documentCollection: 
+
+            matrixDoxumentTerm[documentNumber-1][wordIndexInRepetition] = invertedFile[ (word, documentNumber ) ]
+
+        wordIndexInRepetition = wordIndexInRepetition + 1
+
+    # for j in matrixDoxumentTerm.:
+    
+    return matrixDoxumentTerm
+#search
+def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,repetitionDict ):
+    
+    with open ('data/common_words') as common_word:
+        listLines = common_word.readlines()
+    stopWordsList=[]
+    for l in listLines:
+        stopWordsList.append(l.split("\n")[0].lower())
+
+    listWords = []    
+    listWords = list(repetitionDict.keys())
+    
+
+    tokenizer = nltk.RegexpTokenizer(r"\w+")
+    queryAllWords = tokenizer.tokenize(Query)
+    queryWords = list(sorted(token.lower() for token in queryAllWords if token not in stopWordsList))
+    
+    ####### query victor
+    queryVictor = np.zeros(len(listWords))
+    for index in range(len(queryWords)):
+        word = queryWords[index]
+        
+        if word in listWords:
+            
+            queryVictor[listWords.index(word)] = queryVictor[listWords.index(word)] + 1
+  
+    ####### calculate sem
+    documentList = {}
+    if similarityMeasure == "Inner product" :
+        for documentNumber in range (len(matrixDoxumentTerm)):
+            sommex_y = 0
+            sommey_y = 0
+            sommex_x = 0
+            somme    = 0
+           
+            for word in range (len(queryVictor)) :
+                sommex_y = sommex_y + queryVictor[word] * matrixDoxumentTerm[documentNumber][word]
+            
+            if sommex_y != 0 :
+                somme = sommex_y
+                documentList[documentNumber+1]= somme
+            
+    elif similarityMeasure == "Sørensen–Dice coefficient":
+        for documentNumber in range (len(matrixDoxumentTerm)):
+            sommex_y = 0
+            sommey_y = 0
+            sommex_x = 0
+            somme    = 0
+            for word in range (len(queryVictor)) :
+                sommex_x = sommex_x + queryVictor[word]*queryVictor[word]
+                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][word] * matrixDoxumentTerm[documentNumber][word]
+                sommex_y = sommex_y + queryVictor[word]*matrixDoxumentTerm[documentNumber][word]
+            if sommex_x + sommey_y > 0 and sommex_y != 0 :
+                somme = 2 * sommex_y/(sommex_x + sommey_y)
+                documentList[documentNumber+1]= somme
+    elif similarityMeasure == "Cosine similarity" : 
+        for documentNumber in range (len(matrixDoxumentTerm)):
+            sommex_y = 0
+            sommey_y = 0
+            sommex_x = 0
+            somme    = 0
+            for word in range (len(queryVictor)):
+                sommex_x = sommex_x + queryVictor[word]*queryVictor[word]
+                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][word] * matrixDoxumentTerm[documentNumber][word]
+                sommex_y = sommex_y + queryVictor[word]*matrixDoxumentTerm[documentNumber][word]
+            if sommex_x * sommey_y > 0 and  sommex_y != 0 :
+                somme = sommex_y/math.sqrt(sommex_x * sommey_y)
+                documentList[documentNumber+1]= somme
+
+    elif similarityMeasure == "Jaccard index" :
+        for documentNumber in range (len(matrixDoxumentTerm)):
+            sommex_y = 0
+            sommey_y = 0
+            sommex_x = 0
+            somme    = 0
+            for word in range (len(queryVictor)) :
+                sommex_x = sommex_x + queryVictor[word]*queryVictor[word]
+                sommey_y = sommey_y + matrixDoxumentTerm[documentNumber][word] * matrixDoxumentTerm[documentNumber][word]
+                sommex_y = sommex_y + queryVictor[word]*matrixDoxumentTerm[documentNumber][word]
+            if sommex_x + sommey_y - sommex_y > 0 and sommex_y != 0 :
+                somme = sommex_y/(sommex_x + sommey_y - sommex_y)
+                documentList[documentNumber+1]= somme
+    
+    
+    documentListResult = list(documentList.keys())
+    documentListResult = sorted(documentListResult)
+    return documentListResult
+
+
+
+#evaluation module victorial 
+#calculer recall
+
+def calculeRecall():
+
+    return
+#calculate Precision
+def calculatePrecision():
+    
+    return
+    
 ###################################
 ###################################
 #### applying the fonctions########
@@ -164,12 +283,35 @@ def importInvertedFileWeights(inputfileWeights) :
 if __name__ == '__main__':
     documentList = extract_information()
     wordFrequenctList = calculate_frequency(documentList)
-
-    # invertedFile = create_invertedFile(wordFrequenctList)
+    
+    invertedFile = create_invertedFile(wordFrequenctList)
     # saveInvertedFile("data/invertedFile.pkl",invertedFile)
+    
+    
+    repetitionDict = list_repetition(wordFrequenctList)
+    # invertedFile_weights =createInvertedFileWeights(wordFrequenctList,repetitionDict)
+    # saveInvertedFileWeights("data/invertedFileWeights.pkl",invertedFile_weights)
+    matrixDoxumentTerm = preparationVectorialSearch(repetitionDict,invertedFile,len(documentList) )
+    
+    query = 'Dictionary construction and accessing methods for fast retrieval of words or lexical items or morphologically related information. Hashing or indexing methods are usually applied to English spelling or natural language problems.'
+    
+    similarityMeasure =  "Sørensen–Dice coefficient"#type de similariy 4
+    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
+    print(len(list))
+    
+    
+    similarityMeasure =  "Cosine similarity"#type de similariy 4
+    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
+    print(len(list))
+    
+    similarityMeasure =  "Jaccard index"#type de similariy 4
+    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
+    print(len(list))
 
-    # invertedFile_weights =create_invertedFile_Weights(wordFrequenctList)
-    # saveinvertedFileWeights("data/invertedFileWeights.pkl",invertedFileWeights)
-
-    list_repetition(wordFrequenctList)
+    similarityMeasure =  "Inner product"#type de similariy 4
+    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
+    print(len(list))
+    
+    
+    
     # print(wordFrequenctList)
