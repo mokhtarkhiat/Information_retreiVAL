@@ -67,7 +67,7 @@ def extract_information():
     document.append(writers)
     documentList.append(document)
     
-    return documentList[:20]
+    return documentList
 
 
 #fonction calculate the frequency
@@ -103,12 +103,12 @@ def create_invertedFile(wordFrequenctList):
             
     return invertedFile
     
-def saveInvertedFile(outputFile,invertedFile) :
+def saveToFile(outputFile,obj) :
     output = open(outputFile, 'wb')
-    dump(invertedFile, output, -1)
+    dump(obj, output, -1)
     output.close()
 
-def importInvertedFile(inputfile) :
+def importFromFile(inputfile) :
     input = open(inputfile, 'rb')
     invertedFile = load(input)
     input.close()
@@ -126,10 +126,15 @@ def list_repetition(wordFrequenctList):
 
             repetitionDict[word].append(int(key))    
        
-    for key,val in repetitionDict.items():
-        print(key , " ====>",val)
+    # for key,val in repetitionDict.items():
+    #     print(key , " ====>",val)
     
     return repetitionDict
+
+# def satDocsForWord(wordFrequenctList , word):
+
+
+    
 
 #calculate the weights of the words 
 def createInvertedFileWeights(wordFrequenctList):
@@ -145,16 +150,7 @@ def createInvertedFileWeights(wordFrequenctList):
 
     return invertedFileWeights
 
-def saveInvertedFileWeights(outputFile,invertedFileWeights) :
-    output = open(outputFile, 'wb')
-    dump(invertedFileWeights, output, -1)
-    output.close()
 
-def importInvertedFileWeights(inputfileWeights) :
-    input = open(inputfileWeights, 'rb')
-    invertedFileWeights = load(input)
-    input.close()
-    return invertedFileWeights
 
 ###################################
 ###################################
@@ -166,10 +162,11 @@ if __name__ == '__main__':
     wordFrequenctList = calculate_frequency(documentList)
 
     # invertedFile = create_invertedFile(wordFrequenctList)
-    # saveInvertedFile("data/invertedFile.pkl",invertedFile)
+    # saveToFile("data/invertedFile.pkl",invertedFile)
 
-    # invertedFile_weights =create_invertedFile_Weights(wordFrequenctList)
-    # saveinvertedFileWeights("data/invertedFileWeights.pkl",invertedFileWeights)
+    # invertedFile_weights = createInvertedFileWeights(wordFrequenctList)
+    # saveToFile("data/invertedFileWeights.pkl",invertedFile_weights)
 
-    list_repetition(wordFrequenctList)
+    # list_repetition(wordFrequenctList)
+    saveToFile('data/repetitionList.pkl' , list_repetition(wordFrequenctList))
     # print(wordFrequenctList)
