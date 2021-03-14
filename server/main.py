@@ -69,7 +69,7 @@ def extract_information():
     documentList.append(document)
     
 
-    return documentList[:100]
+    return documentList
 
 
 #fonction calculate the frequency
@@ -173,7 +173,7 @@ def preparationVectorialSearch(repetitionDict,invertedFile,numberDocuments):
     
     return matrixDoxumentTerm
 #search
-def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,repetitionDict ):
+def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,listWords ):
     
     with open ('data/common_words') as common_word:
         listLines = common_word.readlines()
@@ -181,10 +181,7 @@ def vectorialModelSearh(Query , matrixDoxumentTerm , similarityMeasure ,repetiti
     for l in listLines:
         stopWordsList.append(l.split("\n")[0].lower())
 
-    listWords = []    
-    listWords = list(repetitionDict.keys())
-    
-
+       
     tokenizer = nltk.RegexpTokenizer(r"\w+")
     queryAllWords = tokenizer.tokenize(Query)
     queryWords = list(sorted(token.lower() for token in queryAllWords if token not in stopWordsList))
@@ -295,21 +292,23 @@ if __name__ == '__main__':
     query = 'Dictionary construction and accessing methods for fast retrieval of words or lexical items or morphologically related information. Hashing or indexing methods are usually applied to English spelling or natural language problems.'
     
     similarityMeasure =  "Sørensen–Dice coefficient"#type de similariy 4
-    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
-    print(len(list))
+    listWords = list(repetitionDict.keys())
+    
+    documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
+    print(len(documentListResult))
     
     
     similarityMeasure =  "Cosine similarity"#type de similariy 4
-    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
-    print(len(list))
+    documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
+    print(len(documentListResult))
     
     similarityMeasure =  "Jaccard index"#type de similariy 4
-    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
-    print(len(list))
+    documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
+    print(len(documentListResult))
 
     similarityMeasure =  "Inner product"#type de similariy 4
-    list = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , repetitionDict )
-    print(len(list))
+    documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
+    print(len(documentListResult))
     
     
     
