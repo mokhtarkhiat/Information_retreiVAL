@@ -153,7 +153,7 @@ def calculatePrecision():
 ###################################
 if __name__ == '__main__':
     documentList = extract_information()
-    wordFrequenctList = calculate_frequency(documentList)
+    wordFrequenctList = calcul<ate_frequency(documentList)
 
     
     invertedFile = create_invertedFile(wordFrequenctList)

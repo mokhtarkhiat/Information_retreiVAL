@@ -150,7 +150,7 @@ def createInvertedFileWeights(wordFrequenctList,repetitionDict):
             # print(invertedFileWeights[(documentNumber,word)])
     
     
-    print(invertedFileWeights)
+ 
     return invertedFileWeights
 
 
