@@ -12,7 +12,6 @@ from server.vectorialSearch import preparationVectorialSearch,vectorialModelSear
 import nltk
 
 
-<<<<<<< HEAD
 # def satDocsForWord(wordFrequenctList , word):
 
 
@@ -187,11 +186,9 @@ if __name__ == '__main__':
     # similarityMeasure =  "Jaccard index"#type de similariy 4
     # documentListResult = vectorialModelSearh(query , matrixDoxumentTerm  , similarityMeasure , listWords )
     # print(documentListResult)
-=======
 documentList = extract_information()
 invertedfile : dict = importFromFile('data/invertedFile.pkl')
 doc_index : dict = importFromFile('data/repetitionList.pkl')
->>>>>>> 766f4af39900aeac30fd1fb3c34129c70d58b04f
 
 
 
