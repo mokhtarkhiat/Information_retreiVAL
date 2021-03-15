@@ -7,7 +7,7 @@ import string
 import math
 from pickle import dump ,load
 from nltk.probability import FreqDist 
-from utils import create_invertedFile ,list_repetition , extract_information ,calculate_frequency ,saveToFile
+from server.utils import create_invertedFile ,list_repetition , extract_information ,calculate_frequency ,saveToFile
 
 ######## vectorial search 
 # preparation (creat the matrix)

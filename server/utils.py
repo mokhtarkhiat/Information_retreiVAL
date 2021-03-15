@@ -167,8 +167,8 @@ if __name__ == '__main__':
     
     repetitionDict = list_repetition(wordFrequenctList)
 
-    # invertedFile = create_invertedFile(wordFrequenctList)
-    # saveToFile("data/invertedFile.pkl",invertedFile)
+    invertedFile = create_invertedFile(wordFrequenctList)
+    saveToFile("data/invertedFile.pkl",invertedFile)
 
     # invertedFile_weights = createInvertedFileWeights(wordFrequenctList)
     # saveToFile("data/invertedFileWeights.pkl",invertedFile_weights)
